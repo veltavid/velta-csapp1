@@ -1,0 +1,39 @@
+0x000:                      | 	.pos 0
+0x000: 30f50002000000000000 | init:	irmovq Stack,%rbp
+0x00a: 30f40002000000000000 | 	irmovq Stack,%rsp
+0x014: 705000000000000000   | 	jmp Main
+                            | 
+0x020:                      | 	.align 8
+0x020:                      | 	ele1:
+0x020: 0a00000000000000     | 		.quad 0x00a
+0x028: 3000000000000000     | 		.quad ele2
+0x030:                      | 	ele2:
+0x030: b000000000000000     | 		.quad 0x0b0
+0x038: 4000000000000000     | 		.quad ele3
+0x040:                      | 	ele3:
+0x040: 000c000000000000     | 		.quad 0xc00
+0x048: 0000000000000000     | 		.quad 0
+                            | 
+0x050: 30f72000000000000000 | Main:	irmovq ele1,%rdi
+0x05a: 806400000000000000   | 	call sum
+0x063: 00                   | 	halt
+                            | 
+0x064: a05f                 | sum:	pushq %rbp
+0x066: 2045                 | 	rrmovq %rsp,%rbp
+0x068: a02f                 | 	pushq %rdx
+0x06a: 6277                 | 	andq %rdi,%rdi
+0x06c: 739d00000000000000   | 	je end
+0x075: 50270000000000000000 | 	mrmovq (%rdi),%rdx
+0x07f: 50770800000000000000 | 	mrmovq 8(%rdi),%rdi
+0x089: 806400000000000000   | 	call sum
+0x092: 6020                 | 	addq %rdx,%rax
+0x094: 70a700000000000000   | 	jmp back
+                            | 	
+0x09d: 30f00000000000000000 | end:	irmovq $0,%rax
+                            | 
+0x0a7: b02f                 | back:	popq %rdx
+0x0a9: b05f                 | 	popq %rbp
+0x0ab: 90                   | 	ret
+                            | 
+0x200:                      | 	.pos 0x200
+0x200:                      | Stack:
